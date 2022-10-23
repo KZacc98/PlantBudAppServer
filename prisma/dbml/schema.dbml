@@ -1,0 +1,225 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table CareRoutine {
+  id String [pk]
+  routineSteps RoutineStep [not null]
+  isCompleted Boolean [not null, default: false]
+  isActive Boolean [not null, default: true]
+  isShared Boolean [not null, default: false]
+  flag userContentFlag [not null, default: 'default']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  plantId String [unique, not null]
+  plant Plant [not null]
+}
+
+Table RoutineStep {
+  id String [pk]
+  description String [default: '']
+  stepFrequency careRoutineStepFrequency [not null, default: 'default']
+  otherFrequency String
+  isCompleted Boolean [not null, default: false]
+  completedAt DateTime
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  careRoutineId String [not null]
+  careRoutine CareRoutine [not null]
+}
+
+Table Plant {
+  id String [pk]
+  plantName String [not null]
+  plantTypeId String [not null]
+  plantImage String [default: '']
+  careRoutine CareRoutine
+  plantState plantState [not null, default: 'default']
+  plantPlacement plantPlacement [not null, default: 'default']
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime
+  userId String [unique, not null]
+  user User [not null]
+  plantType PlantType [not null]
+}
+
+Table PlantType {
+  id String [pk]
+  species String [default: '']
+  type String [default: '']
+  description String [default: '']
+  createdAt DateTime [default: `now()`]
+  updatedAt DateTime
+  plants Plant [not null]
+}
+
+Table Community {
+  id String [pk]
+  communityName String [not null]
+  posts Post [not null]
+  users CommunityUsers [not null]
+  isActive Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`]
+  updatedAt DateTime
+}
+
+Table Post {
+  id String [pk]
+  postBody String [default: '']
+  comments Comment [not null]
+  image String [default: '']
+  points Int [not null, default: 0]
+  flag userContentFlag [not null]
+  isAnnouncement Boolean [not null, default: false]
+  createdAt DateTime [default: `now()`]
+  updatedAt DateTime
+  userId String [unique, not null]
+  user User [not null]
+  communityId String [unique, not null]
+  community Community [not null]
+}
+
+Table Comment {
+  id String [pk]
+  commentBody String [not null]
+  image String [default: '']
+  points Int [not null, default: 0]
+  flag userContentFlag [not null, default: 'default']
+  createdAt DateTime [default: `now()`]
+  updatedAt DateTime
+  userId String [unique, not null]
+  user User [not null]
+  postId String [unique, not null]
+  post Post [not null]
+}
+
+Table User {
+  id String [pk]
+  name String [not null]
+  email String [not null]
+  phoneNumber String
+  password String [not null]
+  gender gender [not null, default: 'other']
+  plants Plant [not null]
+  badges UserBadges [not null]
+  communities CommunityUsers [not null]
+  posts Post [not null]
+  comments Comment [not null]
+  points Int [not null, default: 0]
+  userType userType [not null, default: 'user']
+  active Boolean [not null, default: true]
+  createdAt DateTime [default: `now()`]
+  updatedAt DateTime
+}
+
+Table Badge {
+  id String [pk]
+  badgeName String [not null]
+  points Int [not null, default: 0]
+  users UserBadges [not null]
+  createdAt DateTime [default: `now()`]
+  updatedAt DateTime
+}
+
+Table UserBadges {
+  userId String [unique, not null]
+  user User [not null]
+  badgeId String [unique, not null]
+  badge Badge [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (userId, badgeId) [pk]
+  }
+}
+
+Table CommunityUsers {
+  userId String [unique, not null]
+  user User [not null]
+  communityId String [unique, not null]
+  community Community [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (userId, communityId) [pk]
+  }
+}
+
+Enum userType {
+  user
+  admin
+}
+
+Enum careRoutineStepFrequency {
+  threeTimesADay
+  twoTimesADay
+  daily
+  everyTwoDays
+  everyThreeDays
+  everyFourDays
+  everyFiveDays
+  everySixDays
+  weekly
+  everyTwoWeeks
+  everyThreeWeeks
+  onceAMonth
+  onceAYear
+  other
+  default
+}
+
+Enum userContentFlag {
+  offfensive
+  useful
+  best
+  default
+}
+
+Enum plantState {
+  thriving
+  good
+  needsAttention
+  thirsty
+  forgotten
+  dead
+  default
+}
+
+Enum plantPlacement {
+  inside
+  outside
+  default
+}
+
+Enum gender {
+  male
+  female
+  other
+  preferNotToTell
+}
+
+Ref: CareRoutine.plantId - Plant.id
+
+Ref: RoutineStep.careRoutineId > CareRoutine.id
+
+Ref: Plant.userId > User.id
+
+Ref: Plant.plantTypeId > PlantType.id
+
+Ref: Post.userId > User.id
+
+Ref: Post.communityId > Community.id
+
+Ref: Comment.userId > User.id
+
+Ref: Comment.postId > Post.id
+
+Ref: UserBadges.userId > User.id
+
+Ref: UserBadges.badgeId > Badge.id
+
+Ref: CommunityUsers.userId > User.id
+
+Ref: CommunityUsers.communityId > Community.id

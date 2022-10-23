@@ -1,0 +1,216 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+model CareRoutine {
+  id           String          @id @db.Uuid
+  routineSteps RoutineStep[]
+  isCompleted  Boolean         @default(false)
+  isActive     Boolean         @default(true)
+  isShared     Boolean         @default(false)
+  flag         userContentFlag @default(default)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime?       @updatedAt
+
+  plantId String @unique @db.Uuid
+  plant   Plant  @relation(fields: [plantId], references: [id])
+}
+
+model RoutineStep {
+  id             String                   @id @db.Uuid
+  description    String?                  @default("") @db.VarChar(500)
+  stepFrequency  careRoutineStepFrequency @default(default)
+  otherFrequency String?                  @db.VarChar(40)
+  isCompleted    Boolean                  @default(false)
+  completedAt    DateTime?                @db.Timestamptz(6)
+  createdAt      DateTime                 @default(now())
+  updatedAt      DateTime                 @updatedAt
+
+  careRoutineId String      @db.Uuid
+  careRoutine   CareRoutine @relation(fields: [careRoutineId], references: [id])
+}
+
+model Plant {
+  id             String         @id @db.Uuid
+  plantName      String         @db.VarChar(255)
+  plantTypeId    String         @db.Uuid
+  plantImage     String?        @default("") @db.VarChar
+  careRoutine    CareRoutine?
+  plantState     plantState     @default(default)
+  plantPlacement plantPlacement @default(default)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime?      @updatedAt
+  userId         String         @unique @db.Uuid
+  user           User           @relation(fields: [userId], references: [id])
+  plantType      PlantType      @relation(fields: [plantTypeId], references: [id])
+}
+
+model PlantType {
+  id          String    @id @db.Uuid
+  species     String?   @default("") @db.VarChar(255)
+  type        String?   @default("") @db.VarChar(255)
+  description String?   @default("") @db.VarChar(1000)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  plants      Plant[]
+}
+
+model Community {
+  id            String           @id @db.Uuid
+  communityName String           @db.VarChar(255)
+  posts         Post[]
+  users         CommunityUsers[]
+  isActive      Boolean          @default(true)
+  createdAt     DateTime?        @default(now())
+  updatedAt     DateTime?        @updatedAt
+}
+
+model Post {
+  id             String          @id @db.Uuid
+  postBody       String?         @default("") @db.VarChar(2000)
+  comments       Comment[]
+  image          String?         @default("") @db.VarChar
+  points         Int             @default(0)
+  flag           userContentFlag
+  isAnnouncement Boolean         @default(false)
+  createdAt      DateTime?       @default(now())
+  updatedAt      DateTime?       @updatedAt
+
+  userId String @unique @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  communityId String    @unique @db.Uuid
+  community   Community @relation(fields: [communityId], references: [id])
+}
+
+model Comment {
+  id          String          @id @db.Uuid
+  commentBody String          @db.VarChar(500)
+  image       String?         @default("") @db.VarChar
+  points      Int             @default(0)
+  flag        userContentFlag @default(default)
+  createdAt   DateTime?       @default(now())
+  updatedAt   DateTime?       @updatedAt
+
+  userId String @unique @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  postId String @unique @db.Uuid
+  post   Post   @relation(fields: [postId], references: [id])
+}
+
+model User {
+  id          String           @id @db.Uuid
+  name        String           @db.VarChar(100)
+  email       String           @db.VarChar(255)
+  phoneNumber String?          @db.VarChar(15)
+  password    String           @db.VarChar(255)
+  gender      gender           @default(other)
+  plants      Plant[]
+  badges      UserBadges[] //wiele do wielu z tabelą
+  communities CommunityUsers[]
+  posts       Post[]
+  comments    Comment[]
+  points      Int              @default(0)
+  userType    userType         @default(user)
+  active      Boolean          @default(true)
+  createdAt   DateTime?        @default(now())
+  updatedAt   DateTime?        @updatedAt
+}
+
+model Badge {
+  id        String       @id @db.Uuid
+  badgeName String       @db.VarChar(255)
+  points    Int          @default(0)
+  users     UserBadges[] //wiele do wielu z tabelą
+  createdAt DateTime?    @default(now())
+  updatedAt DateTime?    @updatedAt
+}
+
+//tabela do relacji wiele badge dla wielu userow
+model UserBadges {
+  userId String @unique @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  badgeId String @unique @db.Uuid
+  badge   Badge  @relation(fields: [badgeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, badgeId])
+}
+
+model CommunityUsers {
+  userId String @unique @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  communityId String    @unique @db.Uuid
+  community   Community @relation(fields: [communityId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@id([userId, communityId])
+}
+
+enum userType {
+  user
+  admin
+}
+
+enum careRoutineStepFrequency {
+  threeTimesADay
+  twoTimesADay
+  daily
+  everyTwoDays
+  everyThreeDays
+  everyFourDays
+  everyFiveDays
+  everySixDays
+  weekly
+  everyTwoWeeks
+  everyThreeWeeks
+  onceAMonth
+  onceAYear
+  other
+  default
+}
+
+enum userContentFlag {
+  offfensive
+  useful
+  best
+  default
+}
+
+enum plantState {
+  thriving
+  good
+  needsAttention
+  thirsty
+  forgotten
+  dead
+  default
+}
+
+enum plantPlacement {
+  inside
+  outside
+  default
+}
+
+enum gender {
+  male
+  female
+  other
+  preferNotToTell
+}
