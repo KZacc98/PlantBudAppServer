@@ -11,8 +11,13 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
+generator typegraphql {
+  provider = "typegraphql-prisma"
+}
+
 model CareRoutine {
-  id           String          @id @db.Uuid
+  id           String          @id @default(uuid())
+  plantId      String          @unique
   routineSteps RoutineStep[]
   isCompleted  Boolean         @default(false)
   isActive     Boolean         @default(true)
@@ -21,12 +26,12 @@ model CareRoutine {
   createdAt    DateTime        @default(now())
   updatedAt    DateTime?       @updatedAt
 
-  plantId String @unique @db.Uuid
-  plant   Plant  @relation(fields: [plantId], references: [id])
+  plant Plant @relation(fields: [plantId], references: [id])
 }
 
 model RoutineStep {
-  id             String                   @id @db.Uuid
+  id             String                   @id @default(uuid())
+  careRoutineId  String       
   description    String?                  @default("") @db.VarChar(500)
   stepFrequency  careRoutineStepFrequency @default(default)
   otherFrequency String?                  @db.VarChar(40)
@@ -35,27 +40,27 @@ model RoutineStep {
   createdAt      DateTime                 @default(now())
   updatedAt      DateTime                 @updatedAt
 
-  careRoutineId String      @db.Uuid
-  careRoutine   CareRoutine @relation(fields: [careRoutineId], references: [id])
+  careRoutine CareRoutine @relation(fields: [careRoutineId], references: [id])
 }
 
 model Plant {
-  id             String         @id @db.Uuid
+  id             String         @id @default(uuid())
   plantName      String         @db.VarChar(255)
-  plantTypeId    String         @db.Uuid
+  plantTypeId    String         
   plantImage     String?        @default("") @db.VarChar
   careRoutine    CareRoutine?
   plantState     plantState     @default(default)
   plantPlacement plantPlacement @default(default)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime?      @updatedAt
-  userId         String         @unique @db.Uuid
-  user           User           @relation(fields: [userId], references: [id])
-  plantType      PlantType      @relation(fields: [plantTypeId], references: [id])
+  userId         String         
+
+  user      User      @relation(fields: [userId], references: [id])
+  plantType PlantType @relation(fields: [plantTypeId], references: [id])
 }
 
 model PlantType {
-  id          String    @id @db.Uuid
+  id          String    @id @default(uuid())
   species     String?   @default("") @db.VarChar(255)
   type        String?   @default("") @db.VarChar(255)
   description String?   @default("") @db.VarChar(1000)
@@ -65,7 +70,7 @@ model PlantType {
 }
 
 model Community {
-  id            String           @id @db.Uuid
+  id            String           @id @default(uuid())
   communityName String           @db.VarChar(255)
   posts         Post[]
   users         CommunityUsers[]
@@ -75,7 +80,9 @@ model Community {
 }
 
 model Post {
-  id             String          @id @db.Uuid
+  id             String          @id @default(uuid())
+  communityId    String          
+  userId         String          
   postBody       String?         @default("") @db.VarChar(2000)
   comments       Comment[]
   image          String?         @default("") @db.VarChar
@@ -85,15 +92,14 @@ model Post {
   createdAt      DateTime?       @default(now())
   updatedAt      DateTime?       @updatedAt
 
-  userId String @unique @db.Uuid
-  user   User   @relation(fields: [userId], references: [id])
-
-  communityId String    @unique @db.Uuid
-  community   Community @relation(fields: [communityId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+  community Community @relation(fields: [communityId], references: [id])
 }
 
 model Comment {
-  id          String          @id @db.Uuid
+  id          String          @id @default(uuid())
+  postId      String          
+  userId      String          
   commentBody String          @db.VarChar(500)
   image       String?         @default("") @db.VarChar
   points      Int             @default(0)
@@ -101,15 +107,12 @@ model Comment {
   createdAt   DateTime?       @default(now())
   updatedAt   DateTime?       @updatedAt
 
-  userId String @unique @db.Uuid
-  user   User   @relation(fields: [userId], references: [id])
-
-  postId String @unique @db.Uuid
-  post   Post   @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
 }
 
 model User {
-  id          String           @id @db.Uuid
+  id          String           @id @default(uuid())
   name        String           @db.VarChar(100)
   email       String           @db.VarChar(255)
   phoneNumber String?          @db.VarChar(15)
@@ -128,7 +131,7 @@ model User {
 }
 
 model Badge {
-  id        String       @id @db.Uuid
+  id        String       @id @default(uuid())
   badgeName String       @db.VarChar(255)
   points    Int          @default(0)
   users     UserBadges[] //wiele do wielu z tabelą
@@ -138,10 +141,10 @@ model Badge {
 
 //tabela do relacji wiele badge dla wielu userow
 model UserBadges {
-  userId String @unique @db.Uuid
+  userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  badgeId String @unique @db.Uuid
+  badgeId String
   badge   Badge  @relation(fields: [badgeId], references: [id])
 
   createdAt DateTime @default(now())
@@ -151,10 +154,9 @@ model UserBadges {
 }
 
 model CommunityUsers {
-  userId String @unique @db.Uuid
+  userId String 
   user   User   @relation(fields: [userId], references: [id])
-
-  communityId String    @unique @db.Uuid
+  communityId String   
   community   Community @relation(fields: [communityId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
