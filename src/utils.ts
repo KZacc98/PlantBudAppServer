@@ -1,7 +1,4 @@
-import { users, plants, careRoutine, plantTypes, careRoutineStep } from '../data/seed'
-import { PrismaClient } from '@prisma/client'
-import { v4 as uuidv4 } from 'uuid';
-import { gender, userType } from '@prisma/client';
+import { gender, PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -52,8 +49,36 @@ async function main() {
     // const allCareRoutinesSteps = await prisma.routineStep.findMany();
     // console.log(allCareRoutinesSteps)
 
-    const result = await prisma.user.findMany()
+    // const result = await prisma.user.findMany()
 
+    // const result = await prisma.plant.findMany({
+    //     where: {
+    //         userId: {
+    //             contains: "ec401a29-563f-470c-81bf-6825d99ecbc6"
+    //         }
+    //     },
+    //     include: {
+    //         careRoutine: {
+    //             include: {
+    //                 routineSteps: true
+    //             }
+    //         }
+    //     }
+    // })
+    // const userPlants = result
+    // console.log(userPlants)
+
+    // const user = await prisma.user.create({
+    //     data: {
+    //       name: 'Elsa Prisma',
+    //       userName: 'elsaplantaccount',
+    //       email: 'elsa@prisma.io',
+    //       password: 'passwodtezzzddd',
+    //       phoneNumber: '+58965236547',
+    //       gender: gender.preferNotToTell,
+    //     },
+    //   })
+    //   console.log(user)
 }
 
 main()
