@@ -18,21 +18,22 @@ CREATE TYPE "gender" AS ENUM ('male', 'female', 'other', 'preferNotToTell');
 
 -- CreateTable
 CREATE TABLE "CareRoutine" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
+    "plantId" TEXT NOT NULL,
     "isCompleted" BOOLEAN NOT NULL DEFAULT false,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "isShared" BOOLEAN NOT NULL DEFAULT false,
     "flag" "userContentFlag" NOT NULL DEFAULT 'default',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
-    "plantId" UUID NOT NULL,
 
     CONSTRAINT "CareRoutine_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "RoutineStep" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
+    "careRoutineId" TEXT NOT NULL,
     "description" VARCHAR(500) DEFAULT '',
     "stepFrequency" "careRoutineStepFrequency" NOT NULL DEFAULT 'default',
     "otherFrequency" VARCHAR(40),
@@ -40,29 +41,28 @@ CREATE TABLE "RoutineStep" (
     "completedAt" TIMESTAMPTZ(6),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "careRoutineId" UUID NOT NULL,
 
     CONSTRAINT "RoutineStep_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Plant" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "plantName" VARCHAR(255) NOT NULL,
-    "plantTypeId" UUID NOT NULL,
+    "plantTypeId" TEXT NOT NULL,
     "plantImage" VARCHAR DEFAULT '',
     "plantState" "plantState" NOT NULL DEFAULT 'default',
     "plantPlacement" "plantPlacement" NOT NULL DEFAULT 'default',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
-    "userId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Plant_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "PlantType" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "species" VARCHAR(255) DEFAULT '',
     "type" VARCHAR(255) DEFAULT '',
     "description" VARCHAR(1000) DEFAULT '',
@@ -74,7 +74,7 @@ CREATE TABLE "PlantType" (
 
 -- CreateTable
 CREATE TABLE "Community" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "communityName" VARCHAR(255) NOT NULL,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -85,7 +85,9 @@ CREATE TABLE "Community" (
 
 -- CreateTable
 CREATE TABLE "Post" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
+    "communityId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "postBody" VARCHAR(2000) DEFAULT '',
     "image" VARCHAR DEFAULT '',
     "points" INTEGER NOT NULL DEFAULT 0,
@@ -93,30 +95,28 @@ CREATE TABLE "Post" (
     "isAnnouncement" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
-    "userId" UUID NOT NULL,
-    "communityId" UUID NOT NULL,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Comment" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
+    "postId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "commentBody" VARCHAR(500) NOT NULL,
     "image" VARCHAR DEFAULT '',
     "points" INTEGER NOT NULL DEFAULT 0,
     "flag" "userContentFlag" NOT NULL DEFAULT 'default',
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
-    "userId" UUID NOT NULL,
-    "postId" UUID NOT NULL,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "phoneNumber" VARCHAR(15),
@@ -133,7 +133,7 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Badge" (
-    "id" UUID NOT NULL,
+    "id" TEXT NOT NULL,
     "badgeName" VARCHAR(255) NOT NULL,
     "points" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -144,8 +144,8 @@ CREATE TABLE "Badge" (
 
 -- CreateTable
 CREATE TABLE "UserBadges" (
-    "userId" UUID NOT NULL,
-    "badgeId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
+    "badgeId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -154,8 +154,8 @@ CREATE TABLE "UserBadges" (
 
 -- CreateTable
 CREATE TABLE "CommunityUsers" (
-    "userId" UUID NOT NULL,
-    "communityId" UUID NOT NULL,
+    "userId" TEXT NOT NULL,
+    "communityId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -164,33 +164,6 @@ CREATE TABLE "CommunityUsers" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "CareRoutine_plantId_key" ON "CareRoutine"("plantId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Plant_userId_key" ON "Plant"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Post_userId_key" ON "Post"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Post_communityId_key" ON "Post"("communityId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Comment_userId_key" ON "Comment"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Comment_postId_key" ON "Comment"("postId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "UserBadges_userId_key" ON "UserBadges"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "UserBadges_badgeId_key" ON "UserBadges"("badgeId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "CommunityUsers_userId_key" ON "CommunityUsers"("userId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "CommunityUsers_communityId_key" ON "CommunityUsers"("communityId");
 
 -- AddForeignKey
 ALTER TABLE "CareRoutine" ADD CONSTRAINT "CareRoutine_plantId_fkey" FOREIGN KEY ("plantId") REFERENCES "Plant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

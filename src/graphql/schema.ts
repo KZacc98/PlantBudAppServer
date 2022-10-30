@@ -1,14 +1,29 @@
 import { gql } from 'apollo-server'
-import { gender, userType } from '@prisma/client'
 
 export const typeDefs = gql`
   type Query{
-    users: [User]
+    allUsers: [User]
+    userByMail(email: String!): User!
+    userPlants(userId: String!): [Plant]!
   }
+  
+  type Mutation {
+    createUser(
+        name: String!
+        userName: String!
+        email: String!
+        password: String!
+        phoneNumber: String,
+        userGender: String
+    ): User!
+    deleteUser(userId: String!): User!
+  }
+  
 
   type User {
     id: String!
     name: String!
+    userName: String!
     email: String!
     phoneNumber: String
     password: String!
@@ -27,6 +42,7 @@ export const typeDefs = gql`
 
 type CareRoutine {
     id: String!
+    plantId: String!
     routineSteps: [RoutineStep]!
     isCompleted: Boolean!
     isActive: Boolean!
@@ -37,7 +53,10 @@ type CareRoutine {
 }
 type RoutineStep {
     id: String!
+    careRoutineId: String!
     description: String
+    stepFrequency: String!
+    otherFrequency: String
     isCompleted: Boolean!
     completedAt: String
     createdAt:String
@@ -47,12 +66,12 @@ type RoutineStep {
 type Plant {
     id: String!
     plantName: String!
-    plantType: PlantType
+    plantTypeId: String!
     plantImage: String
     careRoutine: CareRoutine
     plantState: String!
     plantPlacement: String
-    user: [Plant]!
+    userId: String! 
     createdAt:String
     updatedAt: String
 
@@ -79,6 +98,8 @@ type Community {
 
 type Post {
     id: String!
+    communityId: String!
+    userId: String!
     postBody: String
     comments: [Comment]!
     image: String
@@ -90,7 +111,9 @@ type Post {
 }
 type Comment {
     id: String!
-    commentBody: String
+    postId: String!
+    userId: String!
+    commentBody: String!
     image: String
     points: Int
     flag: String

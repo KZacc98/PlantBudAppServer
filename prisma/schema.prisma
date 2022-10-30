@@ -11,12 +11,8 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
-generator typegraphql {
-  provider = "typegraphql-prisma"
-}
-
 model CareRoutine {
-  id           String          @id @default(uuid())
+  id           String          @id @default(uuid()) @unique
   plantId      String          @unique
   routineSteps RoutineStep[]
   isCompleted  Boolean         @default(false)
@@ -30,7 +26,7 @@ model CareRoutine {
 }
 
 model RoutineStep {
-  id             String                   @id @default(uuid())
+  id             String                   @id @default(uuid()) @unique
   careRoutineId  String       
   description    String?                  @default("") @db.VarChar(500)
   stepFrequency  careRoutineStepFrequency @default(default)
@@ -44,7 +40,7 @@ model RoutineStep {
 }
 
 model Plant {
-  id             String         @id @default(uuid())
+  id             String         @id @default(uuid()) @unique 
   plantName      String         @db.VarChar(255)
   plantTypeId    String         
   plantImage     String?        @default("") @db.VarChar
@@ -60,7 +56,7 @@ model Plant {
 }
 
 model PlantType {
-  id          String    @id @default(uuid())
+  id          String    @id @default(uuid()) @unique
   species     String?   @default("") @db.VarChar(255)
   type        String?   @default("") @db.VarChar(255)
   description String?   @default("") @db.VarChar(1000)
@@ -70,7 +66,7 @@ model PlantType {
 }
 
 model Community {
-  id            String           @id @default(uuid())
+  id            String           @id @default(uuid()) @unique
   communityName String           @db.VarChar(255)
   posts         Post[]
   users         CommunityUsers[]
@@ -80,14 +76,14 @@ model Community {
 }
 
 model Post {
-  id             String          @id @default(uuid())
+  id             String          @id @default(uuid()) @unique
   communityId    String          
   userId         String          
   postBody       String?         @default("") @db.VarChar(2000)
   comments       Comment[]
   image          String?         @default("") @db.VarChar
   points         Int             @default(0)
-  flag           userContentFlag
+  flag           userContentFlag @default(default)
   isAnnouncement Boolean         @default(false)
   createdAt      DateTime?       @default(now())
   updatedAt      DateTime?       @updatedAt
@@ -97,7 +93,7 @@ model Post {
 }
 
 model Comment {
-  id          String          @id @default(uuid())
+  id          String          @id @default(uuid()) @unique
   postId      String          
   userId      String          
   commentBody String          @db.VarChar(500)
@@ -112,9 +108,10 @@ model Comment {
 }
 
 model User {
-  id          String           @id @default(uuid())
+  id          String           @id @default(uuid()) @unique
   name        String           @db.VarChar(100)
-  email       String           @db.VarChar(255)
+  userName    String           @db.VarChar(100) @unique
+  email       String           @db.VarChar(255) @unique
   phoneNumber String?          @db.VarChar(15)
   password    String           @db.VarChar(255)
   gender      gender           @default(other)
@@ -131,7 +128,7 @@ model User {
 }
 
 model Badge {
-  id        String       @id @default(uuid())
+  id        String       @id @default(uuid()) @unique
   badgeName String       @db.VarChar(255)
   points    Int          @default(0)
   users     UserBadges[] //wiele do wielu z tabelą
