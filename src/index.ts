@@ -1,32 +1,31 @@
 const { ApolloServer } = require('apollo-server');
-import { typeDefs } from './graphql/schema'
-import { resolvers } from './graphql/resolvers'
+import "reflect-metadata";
 import { PrismaClient } from '@prisma/client'
-
-import UserAPI from './datasources/user';
-import ProjectAPI from './datasources/project';
-
-
-const store = new PrismaClient();
-
-const dataSources = () => ({
-    userAPI: new UserAPI({ store }),
-    projectAPI: new ProjectAPI({ store })
-})
-
-const context = async ({ req }:{ req: any }) => {
-    return null;
-}
+import { resolvers } from '../node_modules/@generated/type-graphql'
+import { buildSchema } from 'type-graphql';
 
 
-const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    dataSources,
-    context
-});
+const prisma = new PrismaClient();
 
-server.listen().then(({ url }: { url: string }) => {
-    console.log(`🚀  Server ready at ${url}`);
-});
+async function bootstrap() {
+    const schema = await buildSchema({
+        resolvers,
+        validate: false,
+    });
+  
+    const server = new ApolloServer({
+        schema,
+        resolvers,
+        context: () => ({ prisma }),
+    });
+    
+    server.listen().then(({ url }: { url: string }) => {
+        console.log(`🚀  Server ready at ${url}`);
+    });
+  }
+  
+  bootstrap(); 
+
+
+
 
