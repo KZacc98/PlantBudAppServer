@@ -1,0 +1,12 @@
+export { AggregatePlantTypeArgs } from "./AggregatePlantTypeArgs";
+export { CreateManyPlantTypeArgs } from "./CreateManyPlantTypeArgs";
+export { CreateOnePlantTypeArgs } from "./CreateOnePlantTypeArgs";
+export { DeleteManyPlantTypeArgs } from "./DeleteManyPlantTypeArgs";
+export { DeleteOnePlantTypeArgs } from "./DeleteOnePlantTypeArgs";
+export { FindFirstPlantTypeArgs } from "./FindFirstPlantTypeArgs";
+export { FindManyPlantTypeArgs } from "./FindManyPlantTypeArgs";
+export { FindUniquePlantTypeArgs } from "./FindUniquePlantTypeArgs";
+export { GroupByPlantTypeArgs } from "./GroupByPlantTypeArgs";
+export { UpdateManyPlantTypeArgs } from "./UpdateManyPlantTypeArgs";
+export { UpdateOnePlantTypeArgs } from "./UpdateOnePlantTypeArgs";
+export { UpsertOnePlantTypeArgs } from "./UpsertOnePlantTypeArgs";

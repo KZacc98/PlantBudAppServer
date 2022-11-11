@@ -1,0 +1,12 @@
+export { AggregateCommunityArgs } from "./AggregateCommunityArgs";
+export { CreateManyCommunityArgs } from "./CreateManyCommunityArgs";
+export { CreateOneCommunityArgs } from "./CreateOneCommunityArgs";
+export { DeleteManyCommunityArgs } from "./DeleteManyCommunityArgs";
+export { DeleteOneCommunityArgs } from "./DeleteOneCommunityArgs";
+export { FindFirstCommunityArgs } from "./FindFirstCommunityArgs";
+export { FindManyCommunityArgs } from "./FindManyCommunityArgs";
+export { FindUniqueCommunityArgs } from "./FindUniqueCommunityArgs";
+export { GroupByCommunityArgs } from "./GroupByCommunityArgs";
+export { UpdateManyCommunityArgs } from "./UpdateManyCommunityArgs";
+export { UpdateOneCommunityArgs } from "./UpdateOneCommunityArgs";
+export { UpsertOneCommunityArgs } from "./UpsertOneCommunityArgs";

@@ -1,0 +1,12 @@
+export { AggregateUserBadgesArgs } from "./AggregateUserBadgesArgs";
+export { CreateManyUserBadgesArgs } from "./CreateManyUserBadgesArgs";
+export { CreateOneUserBadgesArgs } from "./CreateOneUserBadgesArgs";
+export { DeleteManyUserBadgesArgs } from "./DeleteManyUserBadgesArgs";
+export { DeleteOneUserBadgesArgs } from "./DeleteOneUserBadgesArgs";
+export { FindFirstUserBadgesArgs } from "./FindFirstUserBadgesArgs";
+export { FindManyUserBadgesArgs } from "./FindManyUserBadgesArgs";
+export { FindUniqueUserBadgesArgs } from "./FindUniqueUserBadgesArgs";
+export { GroupByUserBadgesArgs } from "./GroupByUserBadgesArgs";
+export { UpdateManyUserBadgesArgs } from "./UpdateManyUserBadgesArgs";
+export { UpdateOneUserBadgesArgs } from "./UpdateOneUserBadgesArgs";
+export { UpsertOneUserBadgesArgs } from "./UpsertOneUserBadgesArgs";

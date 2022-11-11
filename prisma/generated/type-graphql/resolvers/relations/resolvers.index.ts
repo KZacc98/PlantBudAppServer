@@ -1,0 +1,11 @@
+export { BadgeRelationsResolver } from "./Badge/BadgeRelationsResolver";
+export { CareRoutineRelationsResolver } from "./CareRoutine/CareRoutineRelationsResolver";
+export { CommentRelationsResolver } from "./Comment/CommentRelationsResolver";
+export { CommunityRelationsResolver } from "./Community/CommunityRelationsResolver";
+export { CommunityUsersRelationsResolver } from "./CommunityUsers/CommunityUsersRelationsResolver";
+export { PlantRelationsResolver } from "./Plant/PlantRelationsResolver";
+export { PlantTypeRelationsResolver } from "./PlantType/PlantTypeRelationsResolver";
+export { PostRelationsResolver } from "./Post/PostRelationsResolver";
+export { RoutineStepRelationsResolver } from "./RoutineStep/RoutineStepRelationsResolver";
+export { UserRelationsResolver } from "./User/UserRelationsResolver";
+export { UserBadgesRelationsResolver } from "./UserBadges/UserBadgesRelationsResolver";

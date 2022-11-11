@@ -1,0 +1,12 @@
+export { AggregateCareRoutineArgs } from "./AggregateCareRoutineArgs";
+export { CreateManyCareRoutineArgs } from "./CreateManyCareRoutineArgs";
+export { CreateOneCareRoutineArgs } from "./CreateOneCareRoutineArgs";
+export { DeleteManyCareRoutineArgs } from "./DeleteManyCareRoutineArgs";
+export { DeleteOneCareRoutineArgs } from "./DeleteOneCareRoutineArgs";
+export { FindFirstCareRoutineArgs } from "./FindFirstCareRoutineArgs";
+export { FindManyCareRoutineArgs } from "./FindManyCareRoutineArgs";
+export { FindUniqueCareRoutineArgs } from "./FindUniqueCareRoutineArgs";
+export { GroupByCareRoutineArgs } from "./GroupByCareRoutineArgs";
+export { UpdateManyCareRoutineArgs } from "./UpdateManyCareRoutineArgs";
+export { UpdateOneCareRoutineArgs } from "./UpdateOneCareRoutineArgs";
+export { UpsertOneCareRoutineArgs } from "./UpsertOneCareRoutineArgs";
