@@ -9,3 +9,4 @@ export * from "./Post/args";
 export * from "./RoutineStep/args";
 export * from "./User/args";
 export * from "./UserBadges/args";
+export * from "./UserToken/args";

@@ -13,6 +13,7 @@ import { NullableStringFieldUpdateOperationsInput } from "../inputs/NullableStri
 import { PlantUpdateManyWithoutUserNestedInput } from "../inputs/PlantUpdateManyWithoutUserNestedInput";
 import { PostUpdateManyWithoutUserNestedInput } from "../inputs/PostUpdateManyWithoutUserNestedInput";
 import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
+import { UserTokenUpdateManyWithoutUserNestedInput } from "../inputs/UserTokenUpdateManyWithoutUserNestedInput";
 
 @TypeGraphQL.InputType("UserUpdateWithoutBadgesInput", {
   isAbstract: true
@@ -72,6 +73,11 @@ export class UserUpdateWithoutBadgesInput {
     nullable: true
   })
   comments?: CommentUpdateManyWithoutUserNestedInput | undefined;
+
+  @TypeGraphQL.Field(_type => UserTokenUpdateManyWithoutUserNestedInput, {
+    nullable: true
+  })
+  token?: UserTokenUpdateManyWithoutUserNestedInput | undefined;
 
   @TypeGraphQL.Field(_type => IntFieldUpdateOperationsInput, {
     nullable: true

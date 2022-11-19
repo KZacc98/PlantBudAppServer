@@ -1,15 +1,17 @@
 const { ApolloServer } = require('apollo-server');
 import "reflect-metadata";
 import { PrismaClient } from '@prisma/client'
-import { resolvers } from '../node_modules/@generated/type-graphql'
+import { resolvers } from '../prisma/generated/type-graphql'
 import { buildSchema } from 'type-graphql';
+import { register } from "./customres/register";
+import { login } from "./customres/login";
 
 
 const prisma = new PrismaClient();
 
 async function bootstrap() {
     const schema = await buildSchema({
-        resolvers,
+        resolvers: [...resolvers, register, login],
         validate: false,
     });
   

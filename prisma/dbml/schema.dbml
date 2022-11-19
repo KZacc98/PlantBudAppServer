@@ -106,11 +106,21 @@ Table User {
   communities CommunityUsers [not null]
   posts Post [not null]
   comments Comment [not null]
+  token UserToken [not null]
   points Int [not null, default: 0]
   userType userType [not null, default: 'user']
   active Boolean [not null, default: true]
   createdAt DateTime [default: `now()`]
   updatedAt DateTime
+}
+
+Table UserToken {
+  userId String [not null]
+  token String [unique, not null]
+  createdAt DateTime [default: `now()`]
+  updatedAt DateTime
+  expiresIn DateTime [not null]
+  user User [not null]
 }
 
 Table Badge {
@@ -216,6 +226,8 @@ Ref: Post.communityId > Community.id
 Ref: Comment.userId > User.id
 
 Ref: Comment.postId > Post.id
+
+Ref: UserToken.userId > User.id
 
 Ref: UserBadges.userId > User.id
 

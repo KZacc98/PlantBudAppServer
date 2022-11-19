@@ -5,11 +5,13 @@ import { Plant } from "../../../models/Plant";
 import { Post } from "../../../models/Post";
 import { User } from "../../../models/User";
 import { UserBadges } from "../../../models/UserBadges";
+import { UserToken } from "../../../models/UserToken";
 import { UserBadgesArgs } from "./args/UserBadgesArgs";
 import { UserCommentsArgs } from "./args/UserCommentsArgs";
 import { UserCommunitiesArgs } from "./args/UserCommunitiesArgs";
 import { UserPlantsArgs } from "./args/UserPlantsArgs";
 import { UserPostsArgs } from "./args/UserPostsArgs";
+import { UserTokenArgs } from "./args/UserTokenArgs";
 import { transformFields, getPrismaFromContext, transformCountFieldIntoSelectRelationsCount } from "../../../helpers";
 
 @TypeGraphQL.Resolver(_of => User)
@@ -67,5 +69,16 @@ export class UserRelationsResolver {
         id: user.id,
       },
     }).comments(args);
+  }
+
+  @TypeGraphQL.FieldResolver(_type => [UserToken], {
+    nullable: false
+  })
+  async token(@TypeGraphQL.Root() user: User, @TypeGraphQL.Ctx() ctx: any, @TypeGraphQL.Args() args: UserTokenArgs): Promise<UserToken[]> {
+    return getPrismaFromContext(ctx).user.findUnique({
+      where: {
+        id: user.id,
+      },
+    }).token(args);
   }
 }

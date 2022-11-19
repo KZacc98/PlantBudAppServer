@@ -14,6 +14,7 @@ import { PostListRelationFilter } from "../inputs/PostListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
 import { StringNullableFilter } from "../inputs/StringNullableFilter";
 import { UserBadgesListRelationFilter } from "../inputs/UserBadgesListRelationFilter";
+import { UserTokenListRelationFilter } from "../inputs/UserTokenListRelationFilter";
 
 @TypeGraphQL.InputType("UserWhereInput", {
   isAbstract: true
@@ -93,6 +94,11 @@ export class UserWhereInput {
     nullable: true
   })
   comments?: CommentListRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => UserTokenListRelationFilter, {
+    nullable: true
+  })
+  token?: UserTokenListRelationFilter | undefined;
 
   @TypeGraphQL.Field(_type => IntFilter, {
     nullable: true

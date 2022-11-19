@@ -7,6 +7,7 @@ import { CommunityUsersCreateNestedManyWithoutUserInput } from "../inputs/Commun
 import { PlantCreateNestedManyWithoutUserInput } from "../inputs/PlantCreateNestedManyWithoutUserInput";
 import { PostCreateNestedManyWithoutUserInput } from "../inputs/PostCreateNestedManyWithoutUserInput";
 import { UserBadgesCreateNestedManyWithoutUserInput } from "../inputs/UserBadgesCreateNestedManyWithoutUserInput";
+import { UserTokenCreateNestedManyWithoutUserInput } from "../inputs/UserTokenCreateNestedManyWithoutUserInput";
 import { gender } from "../../enums/gender";
 import { userType } from "../../enums/userType";
 
@@ -73,6 +74,11 @@ export class UserCreateInput {
     nullable: true
   })
   comments?: CommentCreateNestedManyWithoutUserInput | undefined;
+
+  @TypeGraphQL.Field(_type => UserTokenCreateNestedManyWithoutUserInput, {
+    nullable: true
+  })
+  token?: UserTokenCreateNestedManyWithoutUserInput | undefined;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: true

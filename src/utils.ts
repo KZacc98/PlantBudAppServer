@@ -79,6 +79,13 @@ async function main() {
     //     },
     //   })
     //   console.log(user)
+
+    const res = await prisma.user.findFirst({
+        where: {
+            userName: "dupadupa"
+        }
+    });
+    console.log(res)
 }
 
 main()

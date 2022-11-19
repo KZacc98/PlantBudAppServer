@@ -9,3 +9,4 @@ export { PostRelationsResolver } from "./Post/PostRelationsResolver";
 export { RoutineStepRelationsResolver } from "./RoutineStep/RoutineStepRelationsResolver";
 export { UserRelationsResolver } from "./User/UserRelationsResolver";
 export { UserBadgesRelationsResolver } from "./UserBadges/UserBadgesRelationsResolver";
+export { UserTokenRelationsResolver } from "./UserToken/UserTokenRelationsResolver";

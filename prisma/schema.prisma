@@ -17,7 +17,7 @@ generator dbml {
 }
 
 model CareRoutine {
-  id           String          @id @default(uuid()) @unique
+  id           String          @id @unique @default(uuid())
   plantId      String          @unique
   routineSteps RoutineStep[]
   isCompleted  Boolean         @default(false)
@@ -31,8 +31,8 @@ model CareRoutine {
 }
 
 model RoutineStep {
-  id             String                   @id @default(uuid()) @unique
-  careRoutineId  String       
+  id             String                   @id @unique @default(uuid())
+  careRoutineId  String
   description    String?                  @default("") @db.VarChar(500)
   stepFrequency  careRoutineStepFrequency @default(default)
   otherFrequency String?                  @db.VarChar(40)
@@ -45,23 +45,23 @@ model RoutineStep {
 }
 
 model Plant {
-  id             String         @id @default(uuid()) @unique 
+  id             String         @id @unique @default(uuid())
   plantName      String         @db.VarChar(255)
-  plantTypeId    String         
+  plantTypeId    String
   plantImage     String?        @default("") @db.VarChar
   careRoutine    CareRoutine?
   plantState     plantState     @default(default)
   plantPlacement plantPlacement @default(default)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime?      @updatedAt
-  userId         String         
+  userId         String
 
   user      User      @relation(fields: [userId], references: [id])
   plantType PlantType @relation(fields: [plantTypeId], references: [id])
 }
 
 model PlantType {
-  id          String    @id @default(uuid()) @unique
+  id          String    @id @unique @default(uuid())
   species     String?   @default("") @db.VarChar(255)
   type        String?   @default("") @db.VarChar(255)
   description String?   @default("") @db.VarChar(1000)
@@ -71,7 +71,7 @@ model PlantType {
 }
 
 model Community {
-  id            String           @id @default(uuid()) @unique
+  id            String           @id @unique @default(uuid())
   communityName String           @db.VarChar(255)
   posts         Post[]
   users         CommunityUsers[]
@@ -81,9 +81,9 @@ model Community {
 }
 
 model Post {
-  id             String          @id @default(uuid()) @unique
-  communityId    String          
-  userId         String          
+  id             String          @id @unique @default(uuid())
+  communityId    String
+  userId         String
   postBody       String?         @default("") @db.VarChar(2000)
   comments       Comment[]
   image          String?         @default("") @db.VarChar
@@ -98,9 +98,9 @@ model Post {
 }
 
 model Comment {
-  id          String          @id @default(uuid()) @unique
-  postId      String          
-  userId      String          
+  id          String          @id @unique @default(uuid())
+  postId      String
+  userId      String
   commentBody String          @db.VarChar(500)
   image       String?         @default("") @db.VarChar
   points      Int             @default(0)
@@ -113,10 +113,10 @@ model Comment {
 }
 
 model User {
-  id          String           @id @default(uuid()) @unique
+  id          String           @id @unique @default(uuid())
   name        String           @db.VarChar(100)
-  userName    String           @db.VarChar(100) @unique
-  email       String           @db.VarChar(255) @unique
+  userName    String           @unique @db.VarChar(100)
+  email       String           @unique @db.VarChar(255)
   phoneNumber String?          @db.VarChar(15)
   password    String           @db.VarChar(255)
   gender      gender           @default(other)
@@ -125,6 +125,7 @@ model User {
   communities CommunityUsers[]
   posts       Post[]
   comments    Comment[]
+  token       UserToken[]
   points      Int              @default(0)
   userType    userType         @default(user)
   active      Boolean          @default(true)
@@ -132,8 +133,18 @@ model User {
   updatedAt   DateTime?        @updatedAt
 }
 
+model UserToken {
+  userId    String    @db.VarChar
+  token     String    @unique @db.VarChar
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+  expiresIn DateTime  @default(dbgenerated("NOW() + interval '30 days'"))
+
+  user User @relation(fields: [userId], references: [id])
+}
+
 model Badge {
-  id        String       @id @default(uuid()) @unique
+  id        String       @id @unique @default(uuid())
   badgeName String       @db.VarChar(255)
   points    Int          @default(0)
   users     UserBadges[] //wiele do wielu z tabelą
@@ -156,9 +167,9 @@ model UserBadges {
 }
 
 model CommunityUsers {
-  userId String 
-  user   User   @relation(fields: [userId], references: [id])
-  communityId String   
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  communityId String
   community   Community @relation(fields: [communityId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
