@@ -9,4 +9,3 @@ export { PostCrudResolver } from "./Post/PostCrudResolver";
 export { RoutineStepCrudResolver } from "./RoutineStep/RoutineStepCrudResolver";
 export { UserCrudResolver } from "./User/UserCrudResolver";
 export { UserBadgesCrudResolver } from "./UserBadges/UserBadgesCrudResolver";
-export { UserTokenCrudResolver } from "./UserToken/UserTokenCrudResolver";

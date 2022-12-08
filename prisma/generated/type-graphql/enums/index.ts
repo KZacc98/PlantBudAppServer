@@ -12,7 +12,6 @@ export { SortOrder } from "./SortOrder";
 export { TransactionIsolationLevel } from "./TransactionIsolationLevel";
 export { UserBadgesScalarFieldEnum } from "./UserBadgesScalarFieldEnum";
 export { UserScalarFieldEnum } from "./UserScalarFieldEnum";
-export { UserTokenScalarFieldEnum } from "./UserTokenScalarFieldEnum";
 export { careRoutineStepFrequency } from "./careRoutineStepFrequency";
 export { gender } from "./gender";
 export { plantPlacement } from "./plantPlacement";

@@ -7,7 +7,6 @@ import { CommunityUsers } from "../models/CommunityUsers";
 import { Plant } from "../models/Plant";
 import { Post } from "../models/Post";
 import { UserBadges } from "../models/UserBadges";
-import { UserToken } from "../models/UserToken";
 import { gender } from "../enums/gender";
 import { userType } from "../enums/userType";
 import { UserCount } from "../resolvers/outputs/UserCount";
@@ -60,8 +59,6 @@ export class User {
   posts?: Post[];
 
   comments?: Comment[];
-
-  token?: UserToken[];
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false

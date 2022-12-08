@@ -3,8 +3,8 @@
 //// ------------------------------------------------------
 
 Table CareRoutine {
-  id String [pk, unique]
-  plantId String [unique, not null]
+  id Int [pk, increment]
+  plantId Int [unique, not null]
   routineSteps RoutineStep [not null]
   isCompleted Boolean [not null, default: false]
   isActive Boolean [not null, default: true]
@@ -16,8 +16,8 @@ Table CareRoutine {
 }
 
 Table RoutineStep {
-  id String [pk, unique]
-  careRoutineId String [not null]
+  id Int [pk, increment]
+  careRoutineId Int [not null]
   description String [default: '']
   stepFrequency careRoutineStepFrequency [not null, default: 'default']
   otherFrequency String
@@ -29,22 +29,22 @@ Table RoutineStep {
 }
 
 Table Plant {
-  id String [pk, unique]
+  id Int [pk, increment]
   plantName String [not null]
-  plantTypeId String [not null]
+  plantTypeId Int [not null]
   plantImage String [default: '']
   careRoutine CareRoutine
   plantState plantState [not null, default: 'default']
   plantPlacement plantPlacement [not null, default: 'default']
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime
-  userId String [not null]
+  userId Int [not null]
   user User [not null]
   plantType PlantType [not null]
 }
 
 Table PlantType {
-  id String [pk, unique]
+  id Int [pk, increment]
   species String [default: '']
   type String [default: '']
   description String [default: '']
@@ -54,7 +54,7 @@ Table PlantType {
 }
 
 Table Community {
-  id String [pk, unique]
+  id Int [pk, increment]
   communityName String [not null]
   posts Post [not null]
   users CommunityUsers [not null]
@@ -64,9 +64,9 @@ Table Community {
 }
 
 Table Post {
-  id String [pk, unique]
-  communityId String [not null]
-  userId String [not null]
+  id Int [pk, increment]
+  communityId Int [not null]
+  userId Int [not null]
   postBody String [default: '']
   comments Comment [not null]
   image String [default: '']
@@ -80,9 +80,9 @@ Table Post {
 }
 
 Table Comment {
-  id String [pk, unique]
-  postId String [not null]
-  userId String [not null]
+  id Int [pk, increment]
+  postId Int [not null]
+  userId Int [not null]
   commentBody String [not null]
   image String [default: '']
   points Int [not null, default: 0]
@@ -94,7 +94,7 @@ Table Comment {
 }
 
 Table User {
-  id String [pk, unique]
+  id Int [pk, increment]
   name String [not null]
   userName String [unique, not null]
   email String [unique, not null]
@@ -106,7 +106,6 @@ Table User {
   communities CommunityUsers [not null]
   posts Post [not null]
   comments Comment [not null]
-  token UserToken [not null]
   points Int [not null, default: 0]
   userType userType [not null, default: 'user']
   active Boolean [not null, default: true]
@@ -114,17 +113,8 @@ Table User {
   updatedAt DateTime
 }
 
-Table UserToken {
-  userId String [not null]
-  token String [unique, not null]
-  createdAt DateTime [default: `now()`]
-  updatedAt DateTime
-  expiresIn DateTime [not null]
-  user User [not null]
-}
-
 Table Badge {
-  id String [pk, unique]
+  id Int [pk, increment]
   badgeName String [not null]
   points Int [not null, default: 0]
   users UserBadges [not null]
@@ -133,9 +123,9 @@ Table Badge {
 }
 
 Table UserBadges {
-  userId String [not null]
+  userId Int [not null]
   user User [not null]
-  badgeId String [not null]
+  badgeId Int [not null]
   badge Badge [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
@@ -146,9 +136,9 @@ Table UserBadges {
 }
 
 Table CommunityUsers {
-  userId String [not null]
+  userId Int [not null]
   user User [not null]
-  communityId String [not null]
+  communityId Int [not null]
   community Community [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
@@ -226,8 +216,6 @@ Ref: Post.communityId > Community.id
 Ref: Comment.userId > User.id
 
 Ref: Comment.postId > Post.id
-
-Ref: UserToken.userId > User.id
 
 Ref: UserBadges.userId > User.id
 

@@ -91,7 +91,7 @@ CREATE TABLE "Post" (
     "postBody" VARCHAR(2000) DEFAULT '',
     "image" VARCHAR DEFAULT '',
     "points" INTEGER NOT NULL DEFAULT 0,
-    "flag" "userContentFlag" NOT NULL,
+    "flag" "userContentFlag" NOT NULL DEFAULT 'default',
     "isAnnouncement" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
@@ -118,6 +118,7 @@ CREATE TABLE "Comment" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" VARCHAR(100) NOT NULL,
+    "userName" VARCHAR(100) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "phoneNumber" VARCHAR(15),
     "password" VARCHAR(255) NOT NULL,
@@ -163,7 +164,40 @@ CREATE TABLE "CommunityUsers" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "CareRoutine_id_key" ON "CareRoutine"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "CareRoutine_plantId_key" ON "CareRoutine"("plantId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "RoutineStep_id_key" ON "RoutineStep"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Plant_id_key" ON "Plant"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "PlantType_id_key" ON "PlantType"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Community_id_key" ON "Community"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Post_id_key" ON "Post"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Comment_id_key" ON "Comment"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_id_key" ON "User"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_userName_key" ON "User"("userName");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Badge_id_key" ON "Badge"("id");
 
 -- AddForeignKey
 ALTER TABLE "CareRoutine" ADD CONSTRAINT "CareRoutine_plantId_fkey" FOREIGN KEY ("plantId") REFERENCES "Plant"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

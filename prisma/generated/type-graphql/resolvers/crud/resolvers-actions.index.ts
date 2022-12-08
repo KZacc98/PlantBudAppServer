@@ -130,15 +130,3 @@ export { GroupByUserBadgesResolver } from "./UserBadges/GroupByUserBadgesResolve
 export { UpdateManyUserBadgesResolver } from "./UserBadges/UpdateManyUserBadgesResolver";
 export { UpdateOneUserBadgesResolver } from "./UserBadges/UpdateOneUserBadgesResolver";
 export { UpsertOneUserBadgesResolver } from "./UserBadges/UpsertOneUserBadgesResolver";
-export { AggregateUserTokenResolver } from "./UserToken/AggregateUserTokenResolver";
-export { CreateManyUserTokenResolver } from "./UserToken/CreateManyUserTokenResolver";
-export { CreateOneUserTokenResolver } from "./UserToken/CreateOneUserTokenResolver";
-export { DeleteManyUserTokenResolver } from "./UserToken/DeleteManyUserTokenResolver";
-export { DeleteOneUserTokenResolver } from "./UserToken/DeleteOneUserTokenResolver";
-export { FindFirstUserTokenResolver } from "./UserToken/FindFirstUserTokenResolver";
-export { FindManyUserTokenResolver } from "./UserToken/FindManyUserTokenResolver";
-export { FindUniqueUserTokenResolver } from "./UserToken/FindUniqueUserTokenResolver";
-export { GroupByUserTokenResolver } from "./UserToken/GroupByUserTokenResolver";
-export { UpdateManyUserTokenResolver } from "./UserToken/UpdateManyUserTokenResolver";
-export { UpdateOneUserTokenResolver } from "./UserToken/UpdateOneUserTokenResolver";
-export { UpsertOneUserTokenResolver } from "./UserToken/UpsertOneUserTokenResolver";

@@ -9,4 +9,3 @@ export { Post } from "./Post";
 export { RoutineStep } from "./RoutineStep";
 export { User } from "./User";
 export { UserBadges } from "./UserBadges";
-export { UserToken } from "./UserToken";

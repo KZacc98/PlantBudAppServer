@@ -31,9 +31,4 @@ export class UserCount {
     nullable: false
   })
   comments!: number;
-
-  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
-    nullable: false
-  })
-  token!: number;
 }

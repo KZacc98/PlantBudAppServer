@@ -7,7 +7,6 @@ import { CommunityUsersOrderByRelationAggregateInput } from "../inputs/Community
 import { PlantOrderByRelationAggregateInput } from "../inputs/PlantOrderByRelationAggregateInput";
 import { PostOrderByRelationAggregateInput } from "../inputs/PostOrderByRelationAggregateInput";
 import { UserBadgesOrderByRelationAggregateInput } from "../inputs/UserBadgesOrderByRelationAggregateInput";
-import { UserTokenOrderByRelationAggregateInput } from "../inputs/UserTokenOrderByRelationAggregateInput";
 import { SortOrder } from "../../enums/SortOrder";
 
 @TypeGraphQL.InputType("UserOrderByWithRelationInput", {
@@ -73,11 +72,6 @@ export class UserOrderByWithRelationInput {
     nullable: true
   })
   comments?: CommentOrderByRelationAggregateInput | undefined;
-
-  @TypeGraphQL.Field(_type => UserTokenOrderByRelationAggregateInput, {
-    nullable: true
-  })
-  token?: UserTokenOrderByRelationAggregateInput | undefined;
 
   @TypeGraphQL.Field(_type => SortOrder, {
     nullable: true
