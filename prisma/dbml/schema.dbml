@@ -48,6 +48,7 @@ Table PlantType {
   species String [default: '']
   type String [default: '']
   description String [default: '']
+  plantTypeImage String [default: 'https://res.cloudinary.com/dv1dmymg2/image/upload/v1673187625/PlantBuddy/PlantTypes/template_primary_tofeqr.jpg']
   createdAt DateTime [default: `now()`]
   updatedAt DateTime
   plants Plant [not null]
@@ -56,6 +57,9 @@ Table PlantType {
 Table Community {
   id Int [pk, increment]
   communityName String [not null]
+  communityBigImage String [not null, default: 'https://res.cloudinary.com/dv1dmymg2/image/upload/c_fill,h_256,w_512,x_0/v1673289877/PlantBuddy/Communities/BackgroundHeaders/DALL_E_2023-01-09_19.42.52_-_corporateStyle_people_figures_smiling_and_talking_surrounded_by_lots_of_different_home_plants_klh4dh.png']
+  communitySmallImage String [not null, default: 'https://res.cloudinary.com/dv1dmymg2/image/upload/v1673187625/PlantBuddy/PlantTypes/template_primary_tofeqr.jpg']
+  communityDescription String [not null, default: 'Hop in!']
   posts Post [not null]
   users CommunityUsers [not null]
   isActive Boolean [not null, default: true]
@@ -66,7 +70,7 @@ Table Community {
 Table Post {
   id Int [pk, increment]
   communityId Int [not null]
-  userId Int [not null]
+  userName String [not null]
   postBody String [default: '']
   comments Comment [not null]
   image String [default: '']
@@ -82,7 +86,7 @@ Table Post {
 Table Comment {
   id Int [pk, increment]
   postId Int [not null]
-  userId Int [not null]
+  userName String [not null]
   commentBody String [not null]
   image String [default: '']
   points Int [not null, default: 0]
@@ -100,6 +104,7 @@ Table User {
   email String [unique, not null]
   phoneNumber String
   password String [not null]
+  profilePicture String [default: '']
   gender gender [not null, default: 'other']
   plants Plant [not null]
   badges UserBadges [not null]
@@ -117,6 +122,8 @@ Table Badge {
   id Int [pk, increment]
   badgeName String [not null]
   points Int [not null, default: 0]
+  badgeDescription String [not null, default: '']
+  badgeImage String [default: '']
   users UserBadges [not null]
   createdAt DateTime [default: `now()`]
   updatedAt DateTime
@@ -209,11 +216,11 @@ Ref: Plant.userId > User.id
 
 Ref: Plant.plantTypeId > PlantType.id
 
-Ref: Post.userId > User.id
+Ref: Post.userName > User.userName
 
 Ref: Post.communityId > Community.id
 
-Ref: Comment.userId > User.id
+Ref: Comment.userName > User.userName
 
 Ref: Comment.postId > Post.id
 

@@ -21,7 +21,7 @@ generator dbml {
 
 model CareRoutine {
   id           Int             @id @default(autoincrement())
-  plantId      Int          @unique
+  plantId      Int             @unique
   routineSteps RoutineStep[]
   isCompleted  Boolean         @default(false)
   isActive     Boolean         @default(true)
@@ -34,7 +34,7 @@ model CareRoutine {
 }
 
 model RoutineStep {
-  id           Int             @id @default(autoincrement())
+  id             Int                      @id @default(autoincrement())
   careRoutineId  Int
   description    String?                  @default("") @db.VarChar(500)
   stepFrequency  careRoutineStepFrequency @default(default)
@@ -48,7 +48,7 @@ model RoutineStep {
 }
 
 model Plant {
-   id           Int             @id @default(autoincrement())
+  id             Int            @id @default(autoincrement())
   plantName      String         @db.VarChar(255)
   plantTypeId    Int
   plantImage     String?        @default("") @db.VarChar
@@ -64,29 +64,33 @@ model Plant {
 }
 
 model PlantType {
-  id           Int             @id @default(autoincrement())
-  species     String?   @default("") @db.VarChar(255)
-  type        String?   @default("") @db.VarChar(255)
-  description String?   @default("") @db.VarChar(1000)
-  createdAt   DateTime? @default(now())
-  updatedAt   DateTime? @updatedAt
-  plants      Plant[]
+  id             Int       @id @default(autoincrement())
+  species        String?   @default("") @db.VarChar(255)
+  type           String?   @default("") @db.VarChar(255)
+  description    String?   @default("") @db.VarChar(1000)
+  plantTypeImage String?   @default("https://res.cloudinary.com/dv1dmymg2/image/upload/v1673187625/PlantBuddy/PlantTypes/template_primary_tofeqr.jpg") @db.VarChar
+  createdAt      DateTime? @default(now())
+  updatedAt      DateTime? @updatedAt
+  plants         Plant[]
 }
 
 model Community {
-  id           Int             @id @default(autoincrement())
-  communityName String           @db.VarChar(255)
-  posts         Post[]
-  users         CommunityUsers[]
-  isActive      Boolean          @default(true)
-  createdAt     DateTime?        @default(now())
-  updatedAt     DateTime?        @updatedAt
+  id                   Int              @id @default(autoincrement())
+  communityName        String           @db.VarChar(255)
+  communityBigImage    String           @default("https://res.cloudinary.com/dv1dmymg2/image/upload/c_fill,h_256,w_512,x_0/v1673289877/PlantBuddy/Communities/BackgroundHeaders/DALL_E_2023-01-09_19.42.52_-_corporateStyle_people_figures_smiling_and_talking_surrounded_by_lots_of_different_home_plants_klh4dh.png") @db.VarChar()
+  communitySmallImage  String           @default("https://res.cloudinary.com/dv1dmymg2/image/upload/v1673187625/PlantBuddy/PlantTypes/template_primary_tofeqr.jpg") @db.VarChar()
+  communityDescription String           @db.VarChar(1000) @default("Hop in!")
+  posts                Post[]
+  users                CommunityUsers[]
+  isActive             Boolean          @default(true)
+  createdAt            DateTime?        @default(now())
+  updatedAt            DateTime?        @updatedAt
 }
 
 model Post {
-  id           Int             @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   communityId    Int
-  userId         Int
+  userName       String
   postBody       String?         @default("") @db.VarChar(2000)
   comments       Comment[]
   image          String?         @default("") @db.VarChar
@@ -96,14 +100,14 @@ model Post {
   createdAt      DateTime?       @default(now())
   updatedAt      DateTime?       @updatedAt
 
-  user      User      @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userName], references: [userName])
   community Community @relation(fields: [communityId], references: [id])
 }
 
 model Comment {
-  id          Int          @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   postId      Int
-  userId      Int
+  userName    String
   commentBody String          @db.VarChar(500)
   image       String?         @default("") @db.VarChar
   points      Int             @default(0)
@@ -111,46 +115,49 @@ model Comment {
   createdAt   DateTime?       @default(now())
   updatedAt   DateTime?       @updatedAt
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userName], references: [userName])
   post Post @relation(fields: [postId], references: [id])
 }
 
 model User {
-  id          Int           @id @default(autoincrement())
-  name        String           @db.VarChar(100)
-  userName    String           @unique @db.VarChar(100)
-  email       String           @unique @db.VarChar(255)
-  phoneNumber String?          @db.VarChar(15)
-  password    String           @db.VarChar(255)
-  gender      gender           @default(other)
-  plants      Plant[]
-  badges      UserBadges[] //wiele do wielu z tabelą
-  communities CommunityUsers[]
-  posts       Post[]
-  comments    Comment[]
-  points      Int              @default(0)
-  userType    userType         @default(user)
-  active      Boolean          @default(true)
-  createdAt   DateTime?        @default(now())
-  updatedAt   DateTime?        @updatedAt
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(100)
+  userName       String           @unique @db.VarChar(100)
+  email          String           @unique @db.VarChar(255)
+  phoneNumber    String?          @db.VarChar(15)
+  password       String           @db.VarChar(255)
+  profilePicture String?          @default("") @db.VarChar
+  gender         gender           @default(other)
+  plants         Plant[]
+  badges         UserBadges[] //wiele do wielu z tabelą
+  communities    CommunityUsers[]
+  posts          Post[]
+  comments       Comment[]
+  points         Int              @default(0)
+  userType       userType         @default(user)
+  active         Boolean          @default(true)
+  createdAt      DateTime?        @default(now())
+  updatedAt      DateTime?        @updatedAt
 }
 
 model Badge {
-  id        Int       @id @default(autoincrement())
-  badgeName String       @db.VarChar(255)
-  points    Int          @default(0)
-  users     UserBadges[] //wiele do wielu z tabelą
-  createdAt DateTime?    @default(now())
-  updatedAt DateTime?    @updatedAt
+  id               Int          @id @default(autoincrement())
+  badgeName        String       @db.VarChar(255)
+  points           Int          @default(0)
+  badgeDescription String       @default("") @db.VarChar
+  badgeImage       String?      @default("") @db.VarChar
+  users            UserBadges[] //wiele do wielu z tabelą
+  createdAt        DateTime?    @default(now())
+  updatedAt        DateTime?    @updatedAt
 }
 
 //tabela do relacji wiele badge dla wielu userow
 model UserBadges {
   userId Int
-  user   User   @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
 
   badgeId Int
-  badge   Badge  @relation(fields: [badgeId], references: [id])
+  badge   Badge @relation(fields: [badgeId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
